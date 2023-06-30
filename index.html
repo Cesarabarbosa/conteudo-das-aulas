@@ -1,94 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <title>Cálculo de Argila</title>
   <style>
     body {
       text-align: center;
+      font-size: 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input[type="number"] {
+      font-size: 36px;
+      padding: 10px;
+    }
+
+    button {
+      font-size: 44px;
+      padding: 20px 40px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #resultadoArgila {
+      h
+      font-size: 22px;
+      margin-top: 20px;
     }
   </style>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-<body>
-  <div id="chart"></div>
-
-  <h2>Calculadora de Tempo de Resfriamento</h2>
-  <label for="currentTemp">Temperatura Atual:</label>
-  <input type="number" id="currentTemp" min="0" step="any">
-  <br>
-  <label for="targetTemp">Temperatura Desejada:</label>
-  <input type="number" id="targetTemp" min="0" step="any">
-  <br>
-  <button onclick="calculateTime()">Calcular</button>
-  <p id="result"></p>
-
   <script>
-    // Dados de temperatura e tempo
-    const data = [
-      { hour: '11:29', temp: 1225 },
-      { hour: '00:29', temp: 1003 },
-      { hour: '01:29', temp: 847 },
-      { hour: '02:29', temp: 772 },
-      { hour: '03:29', temp: 620 },
-      { hour: '04:29', temp: 535 },
-      { hour: '05:29', temp: 463 },
-      { hour: '06:29', temp: 402 },
-      { hour: '07:29', temp: 350 },
-      { hour: '08:29', temp: 307 },
-      { hour: '09:29', temp: 270 }
-    ];
+    function calcularArgila() {
+      // Obter as medidas inseridas pelo usuário
+      var alturaCilindro = parseFloat(document.getElementById("alturaCilindro").value);
+      var larguraCilindro = parseFloat(document.getElementById("larguraCilindro").value);
+      var espessuraParede = parseFloat(document.getElementById("espessuraParede").value);
 
-    // Criação do gráfico
-    const temperatures = data.map(entry => entry.temp);
-    const hours = data.map(entry => entry.hour);
+      // Converter as medidas para metros
+      alturaCilindro /= 100;
+      larguraCilindro /= 100;
+      espessuraParede /= 1000;
 
-    const chartData = {
-      x: hours,
-      y: temperatures,
-      type: 'scatter',
-      mode: 'lines+markers'
-    };
+      // Calcular o volume da parede
+      var volumeParede = Math.PI * larguraCilindro * espessuraParede * alturaCilindro;
 
-    const layout = {
-      title: 'Taxa de Resfriamento do Forno',
-      xaxis: { title: 'Hora' },
-      yaxis: { title: 'Temperatura (°C)' }
-    };
+      // Calcular a quantidade de argila necessária
+      var quantidadeArgila = volumeParede * 2000; // Assumindo a densidade da argila como 2000 kg/m^3
 
-    const chart = document.getElementById('chart');
-    Plotly.newPlot(chart, [chartData], layout);
+      // Obter o valor fornecido da largura do cilindro e calcular a quantidade de argila adicional
+      var valorLarguraCilindro = larguraCilindro * 4; // Considerando 4g de argila por cm de largura
+      quantidadeArgila += valorLarguraCilindro;
 
-    // Função para calcular o tempo de resfriamento
-    function calculateTime() {
-      const currentTemp = parseFloat(document.getElementById('currentTemp').value);
-      const targetTemp = parseFloat(document.getElementById('targetTemp').value);
-
-      if (isNaN(currentTemp) || isNaN(targetTemp)) {
-        document.getElementById('result').textContent = 'Por favor, insira valores válidos.';
-        return;
-      }
-
-      let remainingTemp = targetTemp - currentTemp;
-      let elapsedTime = 0;
-
-      for (let i = data.length - 1; i >= 0; i--) {
-        const intervalTemp = data[i].temp - data[i - 1].temp;
-        const intervalHours = 1;
-        const intervalRate = intervalTemp / intervalHours;
-
-        if (remainingTemp / intervalRate >= intervalHours) {
-          remainingTemp -= intervalRate * intervalHours;
-          elapsedTime += intervalHours;
-        } else {
-          elapsedTime += remainingTemp / intervalRate;
-          break;
-        }
-      }
-
-      const hours = Math.floor(elapsedTime);
-      const minutes = Math.round((elapsedTime - hours) * 60);
-
-      document.getElementById('result').textContent = `Tempo estimado: ${hours} horas e ${minutes} minutos.`;
+      // Exibir o resultado da argila
+      document.getElementById("resultadoArgila").innerHTML = "Quantidade de argila necessária: " + quantidadeArgila.toFixed(2) + " kg";
     }
   </script>
+</head>
+<body>
+  <h2>Cálculo de Argila para Cilindro</h2>
+
+  <label for="alturaCilindro">Altura do cilindro (cm):</label>
+  <input type="number" id="alturaCilindro" step="any"><br>
+
+  <label for="larguraCilindro">Largura do cilindro (cm):</label>
+  <input type="number" id="larguraCilindro" step="any"><br>
+
+  <label for="espessuraParede">Espessura da parede (mm):</label>
+  <input type="number" id="espessuraParede" step="any"><br>
+
+  <button onclick="calcularArgila()">Calcular Argila</button><br>
+
+  <h2> <div id="resultadoArgila"></div> </h2>
+ <div  </div>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: center;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <p>As peças cerâmicas no torno seguem a base de um cilindro. Para calcular uma quantidade estimada de argila para a produção de uma peça, leve em conta o tamanho do cilindro necessário para criar o formato desejado. Informe os valores de altura e largura em centímetros. A espessura da parede é medida em milímetros, sendo comumente utilizados de 5 a 7 mm de espessura para peças médias.</p>
+    </div>
 </body>
 </html>
