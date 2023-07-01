@@ -106,47 +106,6 @@
 </style>
 </head>
 <body>
-<div>
-  <!-- O contêiner onde o vídeo será exibido -->
-  <div id="player"></div>
-
-  <script>
-    // API do YouTube
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // Cria um objeto de vídeo do YouTube quando a API estiver pronta
-    var player;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '360',
-        width: '640',
-        videoId: 'c3TbD2Z80c8', // Substitua pelo ID do vídeo do YouTube que deseja incorporar
-        playerVars: {
-          autoplay: 1, // Altere para 1 se desejar reprodução automática
-          controls: 1, // Altere para 0 se não desejar exibir controles
-          rel: 0, // Altere para 0 se não desejar exibir vídeos relacionados ao final
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-    }
-
-    // Função chamada quando o player estiver pronto
-    function onPlayerReady(event) {
-      event.target.playVideo(); // Inicia a reprodução do vídeo
-    }
-
-    // Função chamada quando o estado do player for alterado
-    function onPlayerStateChange(event) {
-      // Aqui você pode adicionar código para executar ações com base no estado do player (ex: pausar ou parar o vídeo)
-    }
-  </script>
-</div>
     <div class="container">
        <h2> <p>As peças cerâmicas no torno seguem a base de um cilindro. Para calcular uma quantidade estimada de argila para a produção de uma peça, leve em conta o tamanho do cilindro necessário para criar o formato desejado. Informe os valores de altura e largura em centímetros. A espessura da parede é medida em milímetros, sendo comumente utilizados de 5 a 7 mm de espessura para peças médias.</p> </h2>
     </div>
