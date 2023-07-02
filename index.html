@@ -60,7 +60,7 @@
       var volumeParede = Math.PI * larguraCilindro * espessuraParede * alturaCilindro;
 
       // Calcular a quantidade de argila necessária
-      var quantidadeArgila = volumeParede * 2000; // Assumindo a densidade da argila como 2000 kg/m^3
+      var quantidadeArgila = volumeParede * 1500; // Assumindo a densidade da argila como 1500 kg/m^3
 
       // Obter o valor fornecido da largura do cilindro e calcular a quantidade de argila adicional
       var valorLarguraCilindro = larguraCilindro * 4; // Considerando 4g de argila por cm de largura
@@ -115,47 +115,8 @@
 <a href="http://bit.ly/aulasonlinedeceramica">http://bit.ly/aulasonlinedeceramica</a> </h2>
    <br>
 <p><h2> Veja nesse vídeo abaixo como funciona as minhas aulas online de cerâmica. </h2><p>
-<div>
-  <!-- O contêiner onde o vídeo será exibido -->
-  <div id="player"></div>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/1Kw_HHJ_ll8" frameborder="0" allowfullscreen></iframe>
 
-  <script>
-    // API do YouTube
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // Cria um objeto de vídeo do YouTube quando a API estiver pronta
-    var player;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '360',
-        width: '640',
-        videoId: '1Kw_HHJ_ll8', // Substitua pelo ID do vídeo do YouTube que deseja incorporar
-        playerVars: {
-          autoplay: 0, // Altere para 1 se desejar reprodução automática
-          controls: 1, // Altere para 0 se não desejar exibir controles
-          rel: 0, // Altere para 0 se não desejar exibir vídeos relacionados ao final
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-    }
-
-    // Função chamada quando o player estiver pronto
-    function onPlayerReady(event) {
-      event.target.playVideo(); // Inicia a reprodução do vídeo
-    }
-
-    // Função chamada quando o estado do player for alterado
-    function onPlayerStateChange(event) {
-      // Aqui você pode adicionar código para executar ações com base no estado do player (ex: pausar ou parar o vídeo)
-    }
-  </script>
-</div>
 <br>
 <div>QUER RECEBER NOVIDADES E ACESSO A AULAS GRÁTIS? FAÇA PARTE DO NOSSO GRUPO DE WHATSAPP, SEM CONVERSAS, APENAS AVISOS E LINK DE AULAS GRÁTIS QUANDO DISPONÍVEL.<br>
 ACESSE O LINK ABAIXO PELO SMARTPHONE PARA ENTRAR NO GRUPO.<br>
