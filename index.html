@@ -1,136 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Cálculo de Argila</title>
-  <style>
-    body {
-      text-align: center;
-      font-size: 20px;
-    }
-
-    h2 {
-      font-size: 24px;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-
-    input[type="number"] {
-      font-size: 36px;
-      padding: 10px;
-    }
-
-    button {
-      font-size: 44px;
-      padding: 20px 40px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #resultadoArgila {
-      h
-      font-size: 22px;
-      margin-top: 20px;
-    }
-  </style>
-  <script>
-    function calcularArgila() {
-      // Obter as medidas inseridas pelo usuário
-      var alturaCilindro = parseFloat(document.getElementById("alturaCilindro").value);
-      var larguraCilindro = parseFloat(document.getElementById("larguraCilindro").value);
-      var espessuraParede = parseFloat(document.getElementById("espessuraParede").value);
-
-      // Converter as medidas para metros
-      alturaCilindro /= 100;
-      larguraCilindro /= 100;
-      espessuraParede /= 1000;
-
-      // Calcular o volume da parede
-      var volumeParede = Math.PI * larguraCilindro * espessuraParede * alturaCilindro;
-
-      // Calcular a quantidade de argila necessária
-      var quantidadeArgila = volumeParede * 1500; // Assumindo a densidade da argila como 1500 kg/m^3
-
-      // Obter o valor fornecido da largura do cilindro e calcular a quantidade de argila adicional
-      var valorLarguraCilindro = larguraCilindro * 4; // Considerando 4g de argila por cm de largura
-      quantidadeArgila += valorLarguraCilindro;
-
-      // Exibir o resultado da argila
-      document.getElementById("resultadoArgila").innerHTML = "Quantidade de argila necessária: " + quantidadeArgila.toFixed(2) + " kg";
-    }
-  </script>
-</head>
-<body>
-  <h2>Cálculo de Argila para Cilindro</h2>
-
-  <label for="alturaCilindro">Altura do cilindro (cm):</label>
-  <input type="number" id="alturaCilindro" step="any"><br>
-
-  <label for="larguraCilindro">Largura do cilindro (cm):</label>
-  <input type="number" id="larguraCilindro" step="any"><br>
-
-  <label for="espessuraParede">Espessura da parede (mm):</label>
-  <input type="number" id="espessuraParede" step="any"><br>
-
-  <button onclick="calcularArgila()">Calcular Argila</button><br>
-
-  <h2> <div id="resultadoArgila"></div> </h2>
- <div  </div>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-    body {
-        font-size: 16px;
-        line-height: 1.5;
-        text-align: center;
-    }
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Intensivo de Modelagem em Torno com César</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 8px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+        ul {
+            margin: 20px 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-<iframe width="640" height="360" src="https://www.youtube.com/embed/c3TbD2Z80c8" frameborder="0" allowfullscreen></iframe>
-<h2> <p>As peças cerâmicas no torno seguem a base de um cilindro. Para calcular uma quantidade estimada de argila para a produção de uma peça, leve em conta o tamanho do cilindro necessário para criar o formato desejado. Informe os valores de altura e largura em centímetros. A espessura da parede é medida em milímetros, sendo comumente utilizados de 5 a 7 mm de espessura para peças médias.</p> </h2>
+        <img src="URL_DA_IMAGEM" alt="Imagem do Workshop">
+        <h1>Workshop Intensivo de Modelagem em Torno com César</h1>
+        <p>Esta proposta visa organizar um workshop de torno cerâmico com César Augusto Barbosa na sua cidade.</p>
+        <p>Meu nome é César Augusto Barbosa. Com 26 anos de experiência em cerâmica, sou natural de Cunha onde iniciei e aprimorei minhas habilidades em torno cerâmico. Desde então, venho oferecendo aulas para aqueles interessados em aprender a arte do torno cerâmico.</p>
+        <p>Atualmente conduzo um ateliê em São Paulo na zona Norte onde realizo cursos intensivos de três dias, direcionados tanto a iniciantes quanto a alunos de nível intermediário. Nestes cursos, compartilho técnicas, dicas e truques para facilitar o aprendizado e permitir que os participantes dominem o torno cerâmico. Recebo alunos de todo o Brasil, mas os custos com transporte e hospedagem frequentemente tornam a participação inviável, levando muitos a desistirem.</p>
+        <p>Com o intuito de superar esses obstáculos, proponho expandir a oferta desses workshops para outras cidades, colaborando com ateliês locais. A seguir, detalho como o workshop será conduzido e qual estrutura será necessária. Caso haja interesse em sediar um desses eventos.</p>
+        <h2>Descrição:</h2>
+        <p>Um curso intensivo de 3 dias, totalizando 18 horas ministrado por um ceramista com 26 anos de experiência. Este workshop abrange técnicas avançadas de modelagem em torno, oferece dicas práticas para facilitar a criação de peças, ensina métodos exclusivos, uso de ferramentas personalizadas para facilitar a criação de peças no torno. Abaixo irei deixar um cronograma mais detalhado dos 3 dias de workshop.</p>
+      <h2>Detalhes Operacionais:</h2>
+<p>No meu ateliê, para realizar o workshop, disponibilizo a cada aluno 10 kg de argila, além de entregar as peças queimadas em biscoito, caso seja de interesse do aluno. Durante o curso, ofereço um lanche e no horário de almoço organizamos uma saída para almoçar em algum restaurante da região.</p>
+
+<p>O investimento para participação no workshop é de R$ 1.200 por pessoa. Esse valor pode ser pago em duas etapas: 50% no ato da inscrição e o restante no dia do evento com a possibilidade de parcelamento no cartão de crédito em até 12 vezes sujeito aos juros cobrados pela operadora do cartão.</p>
+
+<p>Para a realização do workshop em outro ateliê, o valor por participante será mantido em R$ 1.200. Contudo, será necessário acrescentar os custos de transporte e hospedagem. É importante notar que, além da minha hospedagem, será necessário acomodar um assistente que me acompanha para auxiliar durante o workshop, totalizando a necessidade de hospedagem para duas pessoas. A hospedagem pode ser providenciada sem custos adicionais, caso o ateliê anfitrião tenha a infraestrutura adequada. Caso contrário, a hospedagem será organizada na cidade e esses custos devem ser considerados previamente à divulgação do workshop, pois serão repassados aos participantes ou assumidos pelo ateliê anfitrião.</p>
+<p>Meu preço por participante será de R$ 1.200 fixo. O ateliê anfitrião tem total liberdade para adicionar uma taxa extra e estabelecer o valor final por participante, lembrando que os custos de hospedagem e transporte são variáveis e deverão ser diluídos entre os participantes. Para formar uma turma, é necessário um mínimo de 4 e um máximo de 10 pessoas.</p>
+
+<p>O ateliê anfitrião deve fornecer o espaço e a estrutura necessários para acomodar todos os participantes, garantindo que cada aluno tenha acesso a um torno para a realização das atividades práticas sugeridas durante o workshop. Após a realização do workshop, a responsabilidade pelo cuidado das peças produzidas pelos alunos ficará a cargo do ateliê anfitrião. Os detalhes sobre como as peças serão retiradas ou entregues aos alunos serão acordados entre as partes responsáveis, garantindo uma solução conveniente para todos.</p>
+
+<h2>Ferramentas e Material Necessário para Cada Aluno:</h2>
+
+<p>No meu ateliê, forneço toda a estrutura e ferramentas necessárias para os alunos, incluindo aventais. No entanto, reconheço que não será possível transportar todas as ferramentas necessárias para outros locais. Portanto, na proposta do workshop intensivo, caso o ateliê anfitrião não disponha da estrutura que detalharei a seguir, será necessário solicitar que cada aluno traga os seguintes materiais. Se o ateliê anfitrião possuir a estrutura adequada, ele mesmo poderá fornecer esses materiais:</p>
+
+<ul>
+    <li>Uma bacia para colocar água em cada torno;</li>
+    <li>Fios de corte;</li>
+    <li>Agulhas;</li>
+    <li>Esponjas;</li>
+    <li>Ferramentas de acabamento como estecas;</li>
+    <li>Discos de madeira para a confecção de pratos, no mínimo três por pessoa.</li>
+</ul>
+
+<p>Cada aluno está livre para trazer quaisquer ferramentas adicionais que utilize em seu trabalho com o torno.</p>
+
+<p>A responsabilidade pela cobrança dos valores de participação no workshop fica a cargo do ateliê anfitrião. A divulgação do evento será realizada tanto pelo ateliê quanto por mim nas redes sociais, com o objetivo de formar a turma. Importante ressaltar que o ateliê anfitrião determinará o número de alunos desejado, respeitando o mínimo de 4 e o máximo de 10 participantes para compor a turma.</p>
+
+<p>Este workshop não só reduz custos de viagem e hospedagem para os participantes como também oferece aos ateliês uma oportunidade única de enriquecer sua oferta educacional e atrair uma nova clientela, além de estreitar laços com a comunidade ceramista local.</p>
+
+<p>Esta proposta é ajustável e pode ser personalizada para atender às necessidades específicas de cada ateliê ou cidade.</p>
+
+<p>A realização deste workshop no seu ateliê oferece diversos benefícios, incluindo o aumento da visibilidade e do reconhecimento dentro da comunidade de cerâmica. Os participantes terão a chance de aprimorar suas habilidades técnicas, explorar novas técnicas de modelagem em torno e se inspirar em um ambiente criativo e colaborativo. Para o ateliê anfitrião, é uma oportunidade de se estabelecer como um centro de aprendizado e inovação na arte cerâmica, atraindo novos alunos e artistas. Este evento também fortalece a rede de contatos, promovendo trocas valiosas entre ceramistas de diversos níveis de experiência.</p>
+
+<p>Caso você se interesse por esta proposta e deseje realizar o workshop em seu ateliê, estou à disposição para conversarmos e agendar uma data. Você pode entrar em contato comigo através do WhatsApp no número 1198213-2888.</p>
+<h2>Cronograma Completo</h2>
+
+<h3>1° Dia - Início às 9h</h3>
+
+<p><strong>Apresentação Individual:</strong> Cada participante terá a oportunidade de se apresentar.</p>
+
+<p>Discussão sobre as etapas para arrumar e organizar o espaço de trabalho. Apresentação dos primeiros passos para trabalhar no torno. Demonstração de como preparar o barro enfatizando a consistência ideal da argila para o uso no torno. Instrução passo a passo sobre como se posicionar e usar o torno, incluindo técnicas para centralizar e levantar uma peça. Esta demonstração ocupará toda a manhã.</p>
+
+<p><strong>Intervalo para Almoço às 12h</strong></p>
+<p>Retorno às 14h</p>
+
+<p><strong>Prática Guiada:</strong> Após o retorno, cada aluno começará a praticar com uma quantidade inicial de argila, aplicando os conhecimentos adquiridos pela manhã. Foco na centralização e na criação de uma forma básica como um cilindro. Eu, juntamente com uma pessoa que está auxiliando, iremos dar atenção individual a cada aluno que necessite. Alunos que já possuírem mais experiência e domínio sobre a centralização poderão tentar peças mais complexas.</p>
+
+<p>Encerramento às 17h</p>
+
+<h3>2° Dia - Início às 9h</h3>
+
+<p><strong>Demonstração Específica:</strong> A manhã começa com uma demonstração focada em peças específicas. O tema central será a produção de pratos, incluindo dicas e truques para aprimorar e facilitar sua criação no torno. Abordaremos também a produção de peças com tampas e como criar peças em série padronizadas. Haverá um momento para indagar os alunos sobre quaisquer formatos ou tipos de peças específicas que desejem ver demonstrados, personalizando assim a aprendizagem conforme as necessidades do grupo. Apresentarei algumas ferramentas que desenvolvi e utilizo para otimizar o processo de trabalho, especialmente no torno.</p>
+
+<p><strong>Intervalo para Almoço às 12h</strong></p>
+<p>Retorno às 14h</p>
+
+<p><strong>Prática Supervisionada:</strong> Na parte da tarde, os alunos terão a oportunidade de praticar as técnicas demonstradas na parte da manhã. Eu e o assistente acompanharemos de perto o progresso de cada aluno, oferecendo suporte, orientação e feedback personalizado para facilitar o desenvolvimento de suas habilidades.</p>
+
+<p>Encerramento às 17h</p>
+
+<h3>3° Dia - Início às 9h</h3>
+
+<p><strong>Foco em Acabamentos:</strong> Dedicaremos a manhã ao aprendizado e à demonstração de técnicas de acabamento. Com as peças em ponto de couro, mostrarei como realizar acabamentos e explorarei as diversas técnicas aplicáveis no torno. Apresentarei ferramentas específicas e compartilharei truques desenvolvidos por mim para aprimorar esta etapa crucial do processo. Este segmento é essencial para que os alunos aprendam a finalizar suas peças com qualidade e profissionalismo.</p>
+
+<p><strong>Intervalo para Almoço às 12h</strong></p>
+<p>Retorno às 14h</p>
+
+<p><strong>Prática de Acabamento:</strong> Na parte da tarde, os alunos aplicarão as técnicas de acabamento ensinadas na manhã às suas próprias peças. Esta sessão prática visa consolidar o aprendizado, permitindo aos alunos aprimorar suas habilidades sob supervisão direta e receber feedback imediato.</p>
+
+<p><strong>Encerramento do Workshop:</strong> Ao final do dia, reservaremos um momento especial para o encerramento do workshop. Será uma oportunidade para reflexão sobre o aprendizado adquirido, compartilhamento de experiências e feedbacks.</p>
+
     </div>
-  <h2><p>Quer aprender tudo sobre cerâmica por apenas R$49,90?</p>
-<p>Acesse o link e saiba mais.</p>
-<a href="http://bit.ly/aulasonlinedeceramica">http://bit.ly/aulasonlinedeceramica</a> </h2>
-   <br>
-<p><h2> Veja nesse vídeo abaixo como funciona as minhas aulas online de cerâmica. </h2><p>
-<iframe width="640" height="360" src="https://www.youtube.com/embed/1Kw_HHJ_ll8" frameborder="0" allowfullscreen></iframe>
-
-<br>
-<div>QUER RECEBER NOVIDADES E ACESSO A AULAS GRÁTIS? FAÇA PARTE DO NOSSO GRUPO DE WHATSAPP, SEM CONVERSAS, APENAS AVISOS E LINK DE AULAS GRÁTIS QUANDO DISPONÍVEL.<br>
-ACESSE O LINK ABAIXO PELO SMARTPHONE PARA ENTRAR NO GRUPO.<br>
-<p>
-    <strong>
-      <a href="https://chat.whatsapp.com/KtT99PkBSUl4NsKAMNfBwf" target="_blank">Clique aqui para participar do grupo de WhatsApp</a>
-    </strong>
-  </p>
-
-<br> <br> <br> 
-<a href="http://www.contadordevisitas.net.br/detalhes/bs7" target="_blank"><img src="https://www.contadordevisitas.net.br/bs7/" alt="Contador de Visitas" title="Contador de Visitas"></a><br>
- 
-</body>
-</html>
- 
 </body>
 </html>
