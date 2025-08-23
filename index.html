@@ -1,125 +1,253 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workshop Intensivo de Modelagem em Torno com César</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto 20px;
-            border-radius: 8px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        p {
-            color: #666;
-            line-height: 1.6;
-        }
-        ul {
-            margin: 20px 0;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Três PDFs (Busca + Fallback Drive)</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/pdf_viewer.css">
+
+<style>
+  :root{
+    --bg:#0f172a; --panel:#0b1224; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af;
+    --accent:#22c55e; --active:#3b82f6; --danger:#ef4444;
+  }
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
+  header{
+    position:sticky;top:0;z-index:40;padding:10px 12px;border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,#111827 0%, var(--panel) 100%);
+    display:flex;gap:10px;align-items:center;flex-wrap:wrap
+  }
+  .btn{border:1px solid var(--border);background:#111827;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer}
+  .btn:hover{filter:brightness(1.1)}
+  .btn.primary{background:var(--accent);color:#052012;border-color:transparent}
+  .btn.alt{background:#0e1a3a}
+  .btn.danger{background:var(--danger);border-color:transparent}
+  .tip{color:var(--muted);font-size:12px}
+  .wrap{max-width:1200px;margin:0 auto;padding:10px;display:grid;gap:16px}
+  .card{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#0b1224}
+  .card header{position:relative;top:auto;background:#0c1631;border:none;padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+  .title{font-weight:700}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .badge{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:#0e1a3a;color:var(--muted)}
+  .badge.active{background:#0b2a5f;color:#dbeafe;border-color:#1d4ed8}
+  .viewerArea{display:grid}
+  .pane{position:relative;min-height:70vh}
+  .scroll{height:75vh;overflow:auto;background:#060b19}
+  @media (max-width:600px){ .scroll{height:70vh} }
+  .pdfViewer .page{box-shadow:0 6px 22px rgba(0,0,0,.35)}
+  .fallback{display:none;height:75vh}
+  .status{padding:8px 12px;border-top:1px solid var(--border);background:#0a1330;color:var(--muted);display:flex;justify-content:space-between;gap:10px;font-size:12px}
+  a.link{color:#93c5fd;text-decoration:none}
+  a.link:hover{text-decoration:underline}
+</style>
 </head>
 <body>
-    <div class="container">
-        <img src="https://photos.app.goo.gl/yoKVYhaWzMvihufQA" alt="">
-        <h1>Workshop Intensivo de Modelagem em Torno com César</h1>
-        <p>Esta proposta visa organizar um workshop de torno cerâmico com César Augusto Barbosa na sua cidade.</p>
-        <p>Meu nome é César Augusto Barbosa. Com 26 anos de experiência em cerâmica, sou natural de Cunha onde iniciei e aprimorei minhas habilidades em torno cerâmico. Desde então, venho oferecendo aulas para aqueles interessados em aprender a arte do torno cerâmico.</p>
-        <p>Atualmente conduzo um ateliê em São Paulo na zona Norte onde realizo cursos intensivos de três dias, direcionados tanto a iniciantes quanto a alunos de nível intermediário. Nestes cursos, compartilho técnicas, dicas e truques para facilitar o aprendizado e permitir que os participantes dominem o torno cerâmico. Recebo alunos de todo o Brasil, mas os custos com transporte e hospedagem frequentemente tornam a participação inviável, levando muitos a desistirem.</p>
-        <p>Com o intuito de superar esses obstáculos, proponho expandir a oferta desses workshops para outras cidades, colaborando com ateliês locais. A seguir, detalho como o workshop será conduzido e qual estrutura será necessária. Caso haja interesse em sediar um desses eventos.</p>
-        <h2>Descrição:</h2>
-        <p>Um curso intensivo de 3 dias, totalizando 18 horas ministrado por um ceramista com 26 anos de experiência. Este workshop abrange técnicas avançadas de modelagem em torno, oferece dicas práticas para facilitar a criação de peças, ensina métodos exclusivos, uso de ferramentas personalizadas para facilitar a criação de peças no torno. Abaixo irei deixar um cronograma mais detalhado dos 3 dias de workshop.</p>
-      <h2>Detalhes Operacionais:</h2>
-<p>No meu ateliê, para realizar o workshop, disponibilizo a cada aluno 10 kg de argila, além de entregar as peças queimadas em biscoito, caso seja de interesse do aluno. Durante o curso, ofereço um lanche e no horário de almoço organizamos uma saída para almoçar em algum restaurante da região.</p>
+  <header>
+    <button id="btnSearch" class="btn primary">🔎 Buscar no PDF ativo</button>
+    <span class="tip">Toque dentro de um PDF para torná-lo <b>ativo</b>. A busca usa este único botão.</span>
+  </header>
 
-<p>O investimento para participação no workshop é de R$ 1.200 por pessoa. Esse valor pode ser pago em duas etapas: 50% no ato da inscrição e o restante no dia do evento com a possibilidade de parcelamento no cartão de crédito em até 12 vezes sujeito aos juros cobrados pela operadora do cartão.</p>
+  <main class="wrap" id="wrap">
+    <!-- MODELO DE CARD (3 vezes) -->
+    <section class="card" data-key="aula" data-name="Aula de cerâmica">
+      <header>
+        <span class="title">1) Aula de cerâmica</span>
+        <span class="actions">
+          <span class="badge" data-badge>inativo</span>
+          <button class="btn alt" data-force-drive>Forçar modo Drive</button>
+          <a class="btn link" target="_blank" rel="noopener" data-open>Abrir no Drive</a>
+          <a class="btn link" target="_blank" rel="noopener" download data-download>Baixar PDF</a>
+        </span>
+      </header>
+      <div class="viewerArea">
+        <div class="pane">
+          <div class="scroll" data-container><div class="pdfViewer" data-viewer></div></div>
+          <div class="fallback" data-fallback>
+            <iframe data-iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowfullscreen
+                    style="border:0;width:100%;height:100%;background:#000"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+        <div class="status" data-status>Pronto.</div>
+      </div>
+    </section>
 
-<p>Para a realização do workshop em outro ateliê, o valor por participante será mantido em R$ 1.200. Contudo, será necessário acrescentar os custos de transporte e hospedagem. É importante notar que, além da minha hospedagem, será necessário acomodar um assistente que me acompanha para auxiliar durante o workshop, totalizando a necessidade de hospedagem para duas pessoas. A hospedagem pode ser providenciada sem custos adicionais, caso o ateliê anfitrião tenha a infraestrutura adequada. Caso contrário, a hospedagem será organizada na cidade e esses custos devem ser considerados previamente à divulgação do workshop, pois serão repassados aos participantes ou assumidos pelo ateliê anfitrião.</p>
-<p>Meu preço por participante será de R$ 1.200 fixo. O ateliê anfitrião tem total liberdade para adicionar uma taxa extra e estabelecer o valor final por participante, lembrando que os custos de hospedagem e transporte são variáveis e deverão ser diluídos entre os participantes. Para formar uma turma, é necessário um mínimo de 4 e um máximo de 10 pessoas.</p>
+    <section class="card" data-key="esmalte" data-name="Esmalte cerâmico">
+      <header>
+        <span class="title">2) Esmalte cerâmico</span>
+        <span class="actions">
+          <span class="badge" data-badge>inativo</span>
+          <button class="btn alt" data-force-drive>Forçar modo Drive</button>
+          <a class="btn link" target="_blank" rel="noopener" data-open>Abrir no Drive</a>
+          <a class="btn link" target="_blank" rel="noopener" download data-download>Baixar PDF</a>
+        </span>
+      </header>
+      <div class="viewerArea">
+        <div class="pane">
+          <div class="scroll" data-container><div class="pdfViewer" data-viewer></div></div>
+          <div class="fallback" data-fallback>
+            <iframe data-iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowfullscreen
+                    style="border:0;width:100%;height:100%;background:#000"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+        <div class="status" data-status>Pronto.</div>
+      </div>
+    </section>
 
-<p>O ateliê anfitrião deve fornecer o espaço e a estrutura necessários para acomodar todos os participantes, garantindo que cada aluno tenha acesso a um torno para a realização das atividades práticas sugeridas durante o workshop. Após a realização do workshop, a responsabilidade pelo cuidado das peças produzidas pelos alunos ficará a cargo do ateliê anfitrião. Os detalhes sobre como as peças serão retiradas ou entregues aos alunos serão acordados entre as partes responsáveis, garantindo uma solução conveniente para todos.</p>
+    <section class="card" data-key="torno" data-name="Torno">
+      <header>
+        <span class="title">3) Torno</span>
+        <span class="actions">
+          <span class="badge" data-badge>inativo</span>
+          <button class="btn alt" data-force-drive>Forçar modo Drive</button>
+          <a class="btn link" target="_blank" rel="noopener" data-open>Abrir no Drive</a>
+          <a class="btn link" target="_blank" rel="noopener" download data-download>Baixar PDF</a>
+        </span>
+      </header>
+      <div class="viewerArea">
+        <div class="pane">
+          <div class="scroll" data-container><div class="pdfViewer" data-viewer></div></div>
+          <div class="fallback" data-fallback>
+            <iframe data-iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowfullscreen
+                    style="border:0;width:100%;height:100%;background:#000"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+        <div class="status" data-status>Pronto.</div>
+      </div>
+    </section>
+  </main>
 
-<h2>Ferramentas e Material Necessário para Cada Aluno:</h2>
+  <script type="module">
+    import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.mjs";
+    import { EventBus, PDFViewer, PDFFindController, PDFLinkService } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/pdf_viewer.mjs";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.mjs";
 
-<p>No meu ateliê, forneço toda a estrutura e ferramentas necessárias para os alunos, incluindo aventais. No entanto, reconheço que não será possível transportar todas as ferramentas necessárias para outros locais. Portanto, na proposta do workshop intensivo, caso o ateliê anfitrião não disponha da estrutura que detalharei a seguir, será necessário solicitar que cada aluno traga os seguintes materiais. Se o ateliê anfitrião possuir a estrutura adequada, ele mesmo poderá fornecer esses materiais:</p>
+    const IDS = {
+      aula: "134-74sFohor6Lx6_xX_o304o3v9k1Vvt",
+      esmalte: "1lEoXoaulnAo4LtKiKEqz0NlEh_T0HBnW",
+      torno: "1LYOt-GEgjpnXi8iyNtgo-B3CXn-QezB8",
+    };
+    const urls = Object.fromEntries(Object.entries(IDS).map(([k,id]) => ([
+      k, {
+        direct:  `https://drive.google.com/uc?export=download&id=${id}`,
+        preview: `https://drive.google.com/file/d/${id}/preview`,
+        view:    `https://drive.google.com/file/d/${id}/view`,
+      }
+    ])));
 
-<ul>
-    <li>Uma bacia para colocar água em cada torno;</li>
-    <li>Fios de corte;</li>
-    <li>Agulhas;</li>
-    <li>Esponjas;</li>
-    <li>Ferramentas de acabamento como estecas;</li>
-    <li>Discos de madeira para a confecção de pratos, no mínimo três por pessoa.</li>
-</ul>
+    const cards = [...document.querySelectorAll(".card")];
+    const state = {};
+    let activeKey = "aula";
+    const btnSearch = document.getElementById("btnSearch");
+    const isFileProtocol = location.protocol === "file:";
 
-<p>Cada aluno está livre para trazer quaisquer ferramentas adicionais que utilize em seu trabalho com o torno.</p>
+    function setBadge(card, isActive){
+      const b = card.querySelector("[data-badge]");
+      b.textContent = isActive ? "ativo" : "inativo";
+      b.classList.toggle("active", isActive);
+    }
+    function setStatus(card, msg){ card.querySelector("[data-status]").textContent = msg; }
 
-<p>A responsabilidade pela cobrança dos valores de participação no workshop fica a cargo do ateliê anfitrião. A divulgação do evento será realizada tanto pelo ateliê quanto por mim nas redes sociais, com o objetivo de formar a turma. Importante ressaltar que o ateliê anfitrião determinará o número de alunos desejado, respeitando o mínimo de 4 e o máximo de 10 participantes para compor a turma.</p>
+    function toDriveMode(key, reason=""){
+      const s = state[key];
+      const { container, fallback, iframe, card } = s;
+      container.style.display = "none";
+      fallback.style.display  = "block";
+      iframe.src = urls[key].preview;
+      s.pdfDoc = null;
+      setStatus(card, (reason ? reason+" " : "") + "Visualizando via Google Drive (links clicáveis e baixar). A busca é a do próprio Drive.");
+    }
 
-<p>Este workshop não só reduz custos de viagem e hospedagem para os participantes como também oferece aos ateliês uma oportunidade única de enriquecer sua oferta educacional e atrair uma nova clientela, além de estreitar laços com a comunidade ceramista local.</p>
+    function mountViewer(key, card){
+      const container = card.querySelector("[data-container]");
+      const viewerEl  = card.querySelector("[data-viewer]");
+      const fallback  = card.querySelector("[data-fallback]");
+      const iframe    = card.querySelector("[data-iframe]");
 
-<p>Esta proposta é ajustável e pode ser personalizada para atender às necessidades específicas de cada ateliê ou cidade.</p>
+      const eventBus = new EventBus();
+      const linkService = new PDFLinkService({ eventBus, externalLinkTarget: 2 });
+      const findController = new PDFFindController({ eventBus, linkService });
+      const pdfViewer = new PDFViewer({ container, viewer: viewerEl, eventBus, linkService, findController, textLayerMode: 2, annotationMode: 2, enableScripting: false });
+      linkService.setViewer(pdfViewer);
 
-<p>A realização deste workshop no seu ateliê oferece diversos benefícios, incluindo o aumento da visibilidade e do reconhecimento dentro da comunidade de cerâmica. Os participantes terão a chance de aprimorar suas habilidades técnicas, explorar novas técnicas de modelagem em torno e se inspirar em um ambiente criativo e colaborativo. Para o ateliê anfitrião, é uma oportunidade de se estabelecer como um centro de aprendizado e inovação na arte cerâmica, atraindo novos alunos e artistas. Este evento também fortalece a rede de contatos, promovendo trocas valiosas entre ceramistas de diversos níveis de experiência.</p>
+      state[key] = { card, container, fallback, iframe, eventBus, linkService, findController, pdfViewer, loadingTask:null, pdfDoc:null, lastQuery:"" };
 
-<p>Caso você se interesse por esta proposta e deseje realizar o workshop em seu ateliê, estou à disposição para conversarmos e agendar uma data. Você pode entrar em contato comigo através do WhatsApp no número 1198213-2888.</p>
-<h2>Cronograma Completo</h2>
+      container.addEventListener("pointerdown", () => {
+        activeKey = key; cards.forEach(c => setBadge(c, c === card));
+      });
 
-<h3>1° Dia - Início às 9h</h3>
+      // Botão "Forçar modo Drive"
+      card.querySelector("[data-force-drive]").addEventListener("click", () => toDriveMode(key, "Forçado pelo usuário."));
+    }
 
-<p><strong>Apresentação Individual:</strong> Cada participante terá a oportunidade de se apresentar.</p>
+    async function loadPDF(key){
+      const s = state[key];
+      const { card, container, pdfViewer, linkService } = s;
 
-<p>Discussão sobre as etapas para arrumar e organizar o espaço de trabalho. Apresentação dos primeiros passos para trabalhar no torno. Demonstração de como preparar o barro enfatizando a consistência ideal da argila para o uso no torno. Instrução passo a passo sobre como se posicionar e usar o torno, incluindo técnicas para centralizar e levantar uma peça. Esta demonstração ocupará toda a manhã.</p>
+      // links "Abrir" e "Baixar"
+      card.querySelector("[data-open]").href = urls[key].view;
+      const down = card.querySelector("[data-download]");
+      down.href = urls[key].direct; down.setAttribute("download", `${key}.pdf`);
 
-<p><strong>Intervalo para Almoço às 12h</strong></p>
-<p>Retorno às 14h</p>
+      // se estiver abrindo o HTML local (file://), já usa preview do Drive
+      if (isFileProtocol){
+        toDriveMode(key, "Arquivo aberto localmente (file://).");
+        return;
+      }
 
-<p><strong>Prática Guiada:</strong> Após o retorno, cada aluno começará a praticar com uma quantidade inicial de argila, aplicando os conhecimentos adquiridos pela manhã. Foco na centralização e na criação de uma forma básica como um cilindro. Eu, juntamente com uma pessoa que está auxiliando, iremos dar atenção individual a cada aluno que necessite. Alunos que já possuírem mais experiência e domínio sobre a centralização poderão tentar peças mais complexas.</p>
+      // tenta PDF.js
+      setStatus(card, "Carregando…");
+      try{
+        if (s.loadingTask){ try{ await s.loadingTask.destroy(); }catch{} }
+        s.loadingTask = pdfjsLib.getDocument({ url: urls[key].direct, withCredentials:false });
+        const pdfDoc = await s.loadingTask.promise;
+        s.pdfDoc = pdfDoc;
+        pdfViewer.setDocument(pdfDoc);
+        linkService.setDocument(pdfDoc, null);
+        s.eventBus.on("pagesinit", () => { pdfViewer.currentScaleValue = "page-width"; }, { once:true });
+        setStatus(card, `Carregado: ${pdfDoc.numPages} página(s). Toque no PDF para deixá-lo ativo e usar o botão de busca.`);
+      }catch(err){
+        console.warn(`Falha PDF.js (${key}). Indo para preview do Drive.`, err);
+        toDriveMode(key, "O Drive bloqueou o carregamento direto (CORS/permissão).");
+      }
+    }
 
-<p>Encerramento às 17h</p>
+    async function doSearchOneButton(){
+      const s = state[activeKey];
+      if (!s){ return; }
 
-<h3>2° Dia - Início às 9h</h3>
+      if (!s.pdfDoc){
+        // Está em modo Drive: abre o arquivo no Drive para usar a busca nativa
+        window.open(urls[activeKey].view, "_blank", "noopener");
+        return;
+      }
+      let q = prompt("Digite a palavra/frase para buscar no PDF ativo:");
+      if (q && q.trim()){
+        s.lastQuery = q.trim();
+        s.findController.executeCommand("find", {
+          query: s.lastQuery, phraseSearch: true,
+          caseSensitive: false, entireWord: false,
+          highlightAll: true, findPrevious: false
+        });
+      }else if (s.lastQuery){
+        s.findController.executeCommand("findagain", { query: s.lastQuery, findPrevious:false });
+      }
+    }
 
-<p><strong>Demonstração Específica:</strong> A manhã começa com uma demonstração focada em peças específicas. O tema central será a produção de pratos, incluindo dicas e truques para aprimorar e facilitar sua criação no torno. Abordaremos também a produção de peças com tampas e como criar peças em série padronizadas. Haverá um momento para indagar os alunos sobre quaisquer formatos ou tipos de peças específicas que desejem ver demonstrados, personalizando assim a aprendizagem conforme as necessidades do grupo. Apresentarei algumas ferramentas que desenvolvi e utilizo para otimizar o processo de trabalho, especialmente no torno.</p>
-
-<p><strong>Intervalo para Almoço às 12h</strong></p>
-<p>Retorno às 14h</p>
-
-<p><strong>Prática Supervisionada:</strong> Na parte da tarde, os alunos terão a oportunidade de praticar as técnicas demonstradas na parte da manhã. Eu e o assistente acompanharemos de perto o progresso de cada aluno, oferecendo suporte, orientação e feedback personalizado para facilitar o desenvolvimento de suas habilidades.</p>
-
-<p>Encerramento às 17h</p>
-
-<h3>3° Dia - Início às 9h</h3>
-
-<p><strong>Foco em Acabamentos:</strong> Dedicaremos a manhã ao aprendizado e à demonstração de técnicas de acabamento. Com as peças em ponto de couro, mostrarei como realizar acabamentos e explorarei as diversas técnicas aplicáveis no torno. Apresentarei ferramentas específicas e compartilharei truques desenvolvidos por mim para aprimorar esta etapa crucial do processo. Este segmento é essencial para que os alunos aprendam a finalizar suas peças com qualidade e profissionalismo.</p>
-
-<p><strong>Intervalo para Almoço às 12h</strong></p>
-<p>Retorno às 14h</p>
-
-<p><strong>Prática de Acabamento:</strong> Na parte da tarde, os alunos aplicarão as técnicas de acabamento ensinadas na manhã às suas próprias peças. Esta sessão prática visa consolidar o aprendizado, permitindo aos alunos aprimorar suas habilidades sob supervisão direta e receber feedback imediato.</p>
-
-<p><strong>Encerramento do Workshop:</strong> Ao final do dia, reservaremos um momento especial para o encerramento do workshop. Será uma oportunidade para reflexão sobre o aprendizado adquirido, compartilhamento de experiências e feedbacks.</p>
-
-    </div>
+    // init
+    for (const card of cards){
+      const key = card.getAttribute("data-key");
+      mountViewer(key, card);
+      setBadge(card, key === activeKey);
+    }
+    loadPDF("aula"); loadPDF("esmalte"); loadPDF("torno");
+    document.getElementById("btnSearch").addEventListener("click", doSearchOneButton);
+  </script>
 </body>
 </html>
