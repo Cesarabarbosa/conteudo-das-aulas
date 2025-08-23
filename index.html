@@ -5,11 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Conteúdo das Aulas — 3 PDFs com busca</title>
 
+<!-- CSS do PDF.js (necessário para o layout do viewer) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/pdf_viewer.css">
+
 <style>
   :root{--bg:#0f172a;--panel:#0b1224;--text:#e5e7eb;--muted:#9ca3af;--border:#1f2937;--accent:#22c55e}
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
-  header{position:sticky;top:0;z-index:10;background:#111827;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+  header{
+    position:sticky;top:0;z-index:10;background:#111827;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)
+  }
   .btn{border:1px solid var(--border);background:#111827;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer}
   .btn.primary{background:var(--accent);color:#052012;border:none}
   .tip{color:var(--muted);font-size:12px}
@@ -20,8 +25,10 @@
   .actions{display:flex;gap:8px;flex-wrap:wrap}
   .badge{font-size:12px;color:#dbeafe;background:#0b2a5f;border:1px solid #1d4ed8;border-radius:999px;padding:4px 8px;display:none}
   .badge.on{display:inline-block}
-  .frame{width:100%;height:75vh;border:0;background:#000}
-  @media (max-width:600px){ .frame{height:70vh} }
+  /* Área scroll do PDF renderizado pelo PDF.js */
+  .scroll{height:75vh;overflow:auto;background:#060b19}
+  @media (max-width:600px){ .scroll{height:70vh} }
+  .pdfViewer .page{box-shadow:0 6px 22px rgba(0,0,0,.35)}
   .status{padding:8px 12px;border-top:1px solid var(--border);color:var(--muted);font-size:12px}
   a.link{color:#93c5fd;text-decoration:none}
   a.link:hover{text-decoration:underline}
@@ -30,84 +37,160 @@
 <body>
   <header>
     <button id="btnSearch" class="btn primary">🔎 Buscar no PDF ativo</button>
-    <span class="tip">Toque em um PDF para ativá-lo. O botão aplica a busca apenas nele.</span>
+    <span class="tip">Toque em um PDF para ativá-lo. O botão aplica a busca só nele.</span>
   </header>
 
   <main class="wrap">
     <!-- 1) Aula de cerâmica -->
-    <section class="card" data-key="aula">
+    <section class="card" data-key="aula" data-src="pdfs/aula-de-deceramica.pdf">
       <div class="card-head">
         <span class="title">1) Aula de cerâmica</span>
         <div class="actions">
           <span class="badge" data-badge>A T I V O</span>
-          <a class="btn link" target="_blank" href="pdfs/aula-de-deceramica.pdf">Abrir em nova aba</a>
-          <a class="btn link" download href="pdfs/aula-de-deceramica.pdf">Baixar PDF</a>
+          <a class="btn link" target="_blank" href="pdfs/aula-de-deceramica.pdf">Abrir</a>
+          <a class="btn link" download href="pdfs/aula-de-deceramica.pdf">Baixar</a>
         </div>
       </div>
-      <iframe class="frame" data-iframe
-        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/viewer.html?file=https%3A%2F%2Fcesarabarbosa.github.io%2Fconteudo-das-aulas%2Fpdfs%2Faula-de-deceramica.pdf"
-        allowfullscreen></iframe>
-      <div class="status">Toque no PDF para ativar. Use o botão verde para buscar.</div>
+      <div class="scroll" data-container>
+        <div class="pdfViewer" data-viewer></div>
+      </div>
+      <div class="status" data-status>Carregando…</div>
     </section>
 
     <!-- 2) Esmalte cerâmico -->
-    <section class="card" data-key="esmalte">
+    <section class="card" data-key="esmalte" data-src="pdfs/esmalte-ceramico.pdf">
       <div class="card-head">
         <span class="title">2) Esmalte cerâmico</span>
         <div class="actions">
           <span class="badge" data-badge>A T I V O</span>
-          <a class="btn link" target="_blank" href="pdfs/esmalte-ceramico.pdf">Abrir em nova aba</a>
-          <a class="btn link" download href="pdfs/esmalte-ceramico.pdf">Baixar PDF</a>
+          <a class="btn link" target="_blank" href="pdfs/esmalte-ceramico.pdf">Abrir</a>
+          <a class="btn link" download href="pdfs/esmalte-ceramico.pdf">Baixar</a>
         </div>
       </div>
-      <iframe class="frame" data-iframe
-        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/viewer.html?file=https%3A%2F%2Fcesarabarbosa.github.io%2Fconteudo-das-aulas%2Fpdfs%2Fesmalte-ceramico.pdf"
-        allowfullscreen></iframe>
-      <div class="status">Toque no PDF para ativar. Use o botão verde para buscar.</div>
+      <div class="scroll" data-container>
+        <div class="pdfViewer" data-viewer></div>
+      </div>
+      <div class="status" data-status>Carregando…</div>
     </section>
 
     <!-- 3) Torno -->
-    <section class="card" data-key="torno">
+    <section class="card" data-key="torno" data-src="pdfs/torno.pdf">
       <div class="card-head">
         <span class="title">3) Torno</span>
         <div class="actions">
           <span class="badge" data-badge>A T I V O</span>
-          <a class="btn link" target="_blank" href="pdfs/torno.pdf">Abrir em nova aba</a>
-          <a class="btn link" download href="pdfs/torno.pdf">Baixar PDF</a>
+          <a class="btn link" target="_blank" href="pdfs/torno.pdf">Abrir</a>
+          <a class="btn link" download href="pdfs/torno.pdf">Baixar</a>
         </div>
       </div>
-      <iframe class="frame" data-iframe
-        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/viewer.html?file=https%3A%2F%2Fcesarabarbosa.github.io%2Fconteudo-das-aulas%2Fpdfs%2Ftorno.pdf"
-        allowfullscreen></iframe>
-      <div class="status">Toque no PDF para ativar. Use o botão verde para buscar.</div>
+      <div class="scroll" data-container>
+        <div class="pdfViewer" data-viewer></div>
+      </div>
+      <div class="status" data-status>Carregando…</div>
     </section>
   </main>
 
-  <script>
-    // Qual PDF está ativo
-    let activeFrame = null;
-    const cards = document.querySelectorAll(".card");
-    cards.forEach(card => {
-      const iframe = card.querySelector("[data-iframe]");
-      iframe.addEventListener("pointerdown", () => {
-        activeFrame = iframe;
-        cards.forEach(c => c.querySelector("[data-badge]").classList.remove("on"));
-        card.querySelector("[data-badge]").classList.add("on");
-      });
-    });
+  <!-- PDF.js em módulo (sem iframe do viewer) -->
+  <script type="module">
+    import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.mjs";
+    import { EventBus, PDFViewer, PDFFindController, PDFLinkService } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/pdf_viewer.mjs";
 
-    // Botão de busca
-    document.getElementById("btnSearch").addEventListener("click", () => {
-      if (!activeFrame) {
-        alert("Toque em um dos PDFs para ativá-lo.");
-        return;
-      }
-      const term = prompt("Digite a palavra/frase para buscar:");
-      if (!term) return;
-      const url = new URL(activeFrame.src);
-      url.hash = "search=" + encodeURIComponent(term);
-      activeFrame.src = url.toString();
-    });
+    // Worker do PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.mjs";
+
+    const cards = [...document.querySelectorAll(".card")];
+    const state = {};
+    let activeKey = null;
+
+    function setBadge(card, on){
+      const b = card.querySelector("[data-badge]");
+      b.classList.toggle("on", !!on);
+    }
+    function setStatus(card, msg){
+      card.querySelector("[data-status]").textContent = msg;
+    }
+
+    function mountViewer(card){
+      const key        = card.getAttribute("data-key");
+      const pdfUrl     = card.getAttribute("data-src");
+      const container  = card.querySelector("[data-container]");
+      const viewerEl   = card.querySelector("[data-viewer]");
+
+      const eventBus = new EventBus();
+      const linkService = new PDFLinkService({ eventBus, externalLinkTarget: 2 }); // 2=_blank
+      const findController = new PDFFindController({ eventBus, linkService });
+
+      const pdfViewer = new PDFViewer({
+        container,
+        viewer: viewerEl,
+        eventBus,
+        linkService,
+        findController,
+        textLayerMode: 2,
+        annotationMode: 2,
+        enableScripting: false
+      });
+
+      linkService.setViewer(pdfViewer);
+
+      state[key] = {
+        card, container, viewerEl, eventBus, linkService, findController, pdfViewer,
+        loadingTask: null, pdfDoc: null, lastQuery: ""
+      };
+
+      // Tornar ativo ao tocar/rolar
+      container.addEventListener("pointerdown", () => {
+        activeKey = key;
+        cards.forEach(c => setBadge(c, c === card));
+      }, {passive:true});
+
+      // Carregar PDF
+      (async () => {
+        try {
+          setStatus(card, "Carregando…");
+          const task = pdfjsLib.getDocument({ url: pdfUrl, withCredentials: false });
+          state[key].loadingTask = task;
+          const doc = await task.promise;
+          state[key].pdfDoc = doc;
+          pdfViewer.setDocument(doc);
+          linkService.setDocument(doc, null);
+
+          eventBus.on("pagesinit", () => {
+            pdfViewer.currentScaleValue = "page-width";
+          }, { once: true });
+
+          setStatus(card, `Carregado: ${doc.numPages} página(s). Toque aqui para ativar e usar o botão de busca.`);
+        } catch (err) {
+          console.error("Erro ao carregar", key, err);
+          setStatus(card, "Falha ao carregar o PDF. Use os botões Abrir/Baixar acima.");
+        }
+      })();
+    }
+
+    // Busca com botão único
+    function doSearch(){
+      if (!activeKey){ alert("Toque primeiro em um dos PDFs para ativá-lo."); return; }
+      const s = state[activeKey];
+      if (!s || !s.pdfDoc){ alert("PDF ainda não carregado."); return; }
+
+      const q = prompt("Digite a palavra/frase para buscar:");
+      if (!q) return;
+
+      s.lastQuery = q.trim();
+      s.findController.executeCommand("find", {
+        query: s.lastQuery,
+        phraseSearch: true,
+        caseSensitive: false,
+        entireWord: false,
+        highlightAll: true,
+        findPrevious: false
+      });
+    }
+
+    // Inicializa os 3 viewers
+    cards.forEach(mountViewer);
+    document.getElementById("btnSearch").addEventListener("click", doSearch);
   </script>
 </body>
 </html>
