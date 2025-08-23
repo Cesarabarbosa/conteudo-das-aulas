@@ -1,43 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Três PDFs (Busca + Fallback Drive)</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/pdf_viewer.css">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Conteúdo das Aulas — 3 PDFs com busca</title>
 
 <style>
-  :root{
-    --bg:#0f172a; --panel:#0b1224; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af;
-    --accent:#22c55e; --active:#3b82f6; --danger:#ef4444;
-  }
-  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
-  header{
-    position:sticky;top:0;z-index:40;padding:10px 12px;border-bottom:1px solid var(--border);
-    background:linear-gradient(180deg,#111827 0%, var(--panel) 100%);
-    display:flex;gap:10px;align-items:center;flex-wrap:wrap
-  }
+  :root{--bg:#0f172a;--panel:#0b1224;--text:#e5e7eb;--muted:#9ca3af;--border:#1f2937;--accent:#22c55e}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
+  header{position:sticky;top:0;z-index:10;background:#111827;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
   .btn{border:1px solid var(--border);background:#111827;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer}
-  .btn:hover{filter:brightness(1.1)}
-  .btn.primary{background:var(--accent);color:#052012;border-color:transparent}
-  .btn.alt{background:#0e1a3a}
-  .btn.danger{background:var(--danger);border-color:transparent}
+  .btn.primary{background:var(--accent);color:#052012;border:none}
   .tip{color:var(--muted);font-size:12px}
-  .wrap{max-width:1200px;margin:0 auto;padding:10px;display:grid;gap:16px}
+  .wrap{max-width:1200px;margin:0 auto;padding:12px;display:grid;gap:16px}
   .card{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#0b1224}
-  .card header{position:relative;top:auto;background:#0c1631;border:none;padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+  .card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;background:#0c1631}
   .title{font-weight:700}
   .actions{display:flex;gap:8px;flex-wrap:wrap}
-  .badge{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:#0e1a3a;color:var(--muted)}
-  .badge.active{background:#0b2a5f;color:#dbeafe;border-color:#1d4ed8}
-  .viewerArea{display:grid}
-  .pane{position:relative;min-height:70vh}
-  .scroll{height:75vh;overflow:auto;background:#060b19}
-  @media (max-width:600px){ .scroll{height:70vh} }
-  .pdfViewer .page{box-shadow:0 6px 22px rgba(0,0,0,.35)}
-  .fallback{display:none;height:75vh}
-  .status{padding:8px 12px;border-top:1px solid var(--border);background:#0a1330;color:var(--muted);display:flex;justify-content:space-between;gap:10px;font-size:12px}
+  .badge{font-size:12px;color:#dbeafe;background:#0b2a5f;border:1px solid #1d4ed8;border-radius:999px;padding:4px 8px;display:none}
+  .badge.on{display:inline-block}
+  .frame{width:100%;height:75vh;border:0;background:#000}
+  @media (max-width:600px){ .frame{height:70vh} }
+  .status{padding:8px 12px;border-top:1px solid var(--border);color:var(--muted);font-size:12px}
   a.link{color:#93c5fd;text-decoration:none}
   a.link:hover{text-decoration:underline}
 </style>
@@ -45,209 +30,84 @@
 <body>
   <header>
     <button id="btnSearch" class="btn primary">🔎 Buscar no PDF ativo</button>
-    <span class="tip">Toque dentro de um PDF para torná-lo <b>ativo</b>. A busca usa este único botão.</span>
+    <span class="tip">Toque em um PDF para ativá-lo. O botão aplica a busca apenas nele.</span>
   </header>
 
-  <main class="wrap" id="wrap">
-    <!-- MODELO DE CARD (3 vezes) -->
-    <section class="card" data-key="aula" data-name="Aula de cerâmica">
-      <header>
+  <main class="wrap">
+    <!-- 1) Aula de cerâmica -->
+    <section class="card" data-key="aula">
+      <div class="card-head">
         <span class="title">1) Aula de cerâmica</span>
-        <span class="actions">
-          <span class="badge" data-badge>inativo</span>
-          <button class="btn alt" data-force-drive>Forçar modo Drive</button>
-          <a class="btn link" target="_blank" rel="noopener" data-open>Abrir no Drive</a>
-          <a class="btn link" target="_blank" rel="noopener" download data-download>Baixar PDF</a>
-        </span>
-      </header>
-      <div class="viewerArea">
-        <div class="pane">
-          <div class="scroll" data-container><div class="pdfViewer" data-viewer></div></div>
-          <div class="fallback" data-fallback>
-            <iframe data-iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowfullscreen
-                    style="border:0;width:100%;height:100%;background:#000"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
+        <div class="actions">
+          <span class="badge" data-badge>A T I V O</span>
+          <a class="btn link" target="_blank" href="pdfs/aula-de-deceramica.pdf">Abrir em nova aba</a>
+          <a class="btn link" download href="pdfs/aula-de-deceramica.pdf">Baixar PDF</a>
         </div>
-        <div class="status" data-status>Pronto.</div>
       </div>
+      <iframe class="frame" data-iframe
+        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/viewer.html?file=https%3A%2F%2Fcesarabarbosa.github.io%2Fconteudo-das-aulas%2Fpdfs%2Faula-de-deceramica.pdf"
+        allowfullscreen></iframe>
+      <div class="status">Toque no PDF para ativar. Use o botão verde para buscar.</div>
     </section>
 
-    <section class="card" data-key="esmalte" data-name="Esmalte cerâmico">
-      <header>
+    <!-- 2) Esmalte cerâmico -->
+    <section class="card" data-key="esmalte">
+      <div class="card-head">
         <span class="title">2) Esmalte cerâmico</span>
-        <span class="actions">
-          <span class="badge" data-badge>inativo</span>
-          <button class="btn alt" data-force-drive>Forçar modo Drive</button>
-          <a class="btn link" target="_blank" rel="noopener" data-open>Abrir no Drive</a>
-          <a class="btn link" target="_blank" rel="noopener" download data-download>Baixar PDF</a>
-        </span>
-      </header>
-      <div class="viewerArea">
-        <div class="pane">
-          <div class="scroll" data-container><div class="pdfViewer" data-viewer></div></div>
-          <div class="fallback" data-fallback>
-            <iframe data-iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowfullscreen
-                    style="border:0;width:100%;height:100%;background:#000"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
+        <div class="actions">
+          <span class="badge" data-badge>A T I V O</span>
+          <a class="btn link" target="_blank" href="pdfs/esmalte-ceramico.pdf">Abrir em nova aba</a>
+          <a class="btn link" download href="pdfs/esmalte-ceramico.pdf">Baixar PDF</a>
         </div>
-        <div class="status" data-status>Pronto.</div>
       </div>
+      <iframe class="frame" data-iframe
+        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/viewer.html?file=https%3A%2F%2Fcesarabarbosa.github.io%2Fconteudo-das-aulas%2Fpdfs%2Fesmalte-ceramico.pdf"
+        allowfullscreen></iframe>
+      <div class="status">Toque no PDF para ativar. Use o botão verde para buscar.</div>
     </section>
 
-    <section class="card" data-key="torno" data-name="Torno">
-      <header>
+    <!-- 3) Torno -->
+    <section class="card" data-key="torno">
+      <div class="card-head">
         <span class="title">3) Torno</span>
-        <span class="actions">
-          <span class="badge" data-badge>inativo</span>
-          <button class="btn alt" data-force-drive>Forçar modo Drive</button>
-          <a class="btn link" target="_blank" rel="noopener" data-open>Abrir no Drive</a>
-          <a class="btn link" target="_blank" rel="noopener" download data-download>Baixar PDF</a>
-        </span>
-      </header>
-      <div class="viewerArea">
-        <div class="pane">
-          <div class="scroll" data-container><div class="pdfViewer" data-viewer></div></div>
-          <div class="fallback" data-fallback>
-            <iframe data-iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowfullscreen
-                    style="border:0;width:100%;height:100%;background:#000"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
+        <div class="actions">
+          <span class="badge" data-badge>A T I V O</span>
+          <a class="btn link" target="_blank" href="pdfs/torno.pdf">Abrir em nova aba</a>
+          <a class="btn link" download href="pdfs/torno.pdf">Baixar PDF</a>
         </div>
-        <div class="status" data-status>Pronto.</div>
       </div>
+      <iframe class="frame" data-iframe
+        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/viewer.html?file=https%3A%2F%2Fcesarabarbosa.github.io%2Fconteudo-das-aulas%2Fpdfs%2Ftorno.pdf"
+        allowfullscreen></iframe>
+      <div class="status">Toque no PDF para ativar. Use o botão verde para buscar.</div>
     </section>
   </main>
 
-  <script type="module">
-    import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.mjs";
-    import { EventBus, PDFViewer, PDFFindController, PDFLinkService } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/web/pdf_viewer.mjs";
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.mjs";
-
-    const IDS = {
-      aula: "134-74sFohor6Lx6_xX_o304o3v9k1Vvt",
-      esmalte: "1lEoXoaulnAo4LtKiKEqz0NlEh_T0HBnW",
-      torno: "1LYOt-GEgjpnXi8iyNtgo-B3CXn-QezB8",
-    };
-    const urls = Object.fromEntries(Object.entries(IDS).map(([k,id]) => ([
-      k, {
-        direct:  `https://drive.google.com/uc?export=download&id=${id}`,
-        preview: `https://drive.google.com/file/d/${id}/preview`,
-        view:    `https://drive.google.com/file/d/${id}/view`,
-      }
-    ])));
-
-    const cards = [...document.querySelectorAll(".card")];
-    const state = {};
-    let activeKey = "aula";
-    const btnSearch = document.getElementById("btnSearch");
-    const isFileProtocol = location.protocol === "file:";
-
-    function setBadge(card, isActive){
-      const b = card.querySelector("[data-badge]");
-      b.textContent = isActive ? "ativo" : "inativo";
-      b.classList.toggle("active", isActive);
-    }
-    function setStatus(card, msg){ card.querySelector("[data-status]").textContent = msg; }
-
-    function toDriveMode(key, reason=""){
-      const s = state[key];
-      const { container, fallback, iframe, card } = s;
-      container.style.display = "none";
-      fallback.style.display  = "block";
-      iframe.src = urls[key].preview;
-      s.pdfDoc = null;
-      setStatus(card, (reason ? reason+" " : "") + "Visualizando via Google Drive (links clicáveis e baixar). A busca é a do próprio Drive.");
-    }
-
-    function mountViewer(key, card){
-      const container = card.querySelector("[data-container]");
-      const viewerEl  = card.querySelector("[data-viewer]");
-      const fallback  = card.querySelector("[data-fallback]");
-      const iframe    = card.querySelector("[data-iframe]");
-
-      const eventBus = new EventBus();
-      const linkService = new PDFLinkService({ eventBus, externalLinkTarget: 2 });
-      const findController = new PDFFindController({ eventBus, linkService });
-      const pdfViewer = new PDFViewer({ container, viewer: viewerEl, eventBus, linkService, findController, textLayerMode: 2, annotationMode: 2, enableScripting: false });
-      linkService.setViewer(pdfViewer);
-
-      state[key] = { card, container, fallback, iframe, eventBus, linkService, findController, pdfViewer, loadingTask:null, pdfDoc:null, lastQuery:"" };
-
-      container.addEventListener("pointerdown", () => {
-        activeKey = key; cards.forEach(c => setBadge(c, c === card));
+  <script>
+    // Qual PDF está ativo
+    let activeFrame = null;
+    const cards = document.querySelectorAll(".card");
+    cards.forEach(card => {
+      const iframe = card.querySelector("[data-iframe]");
+      iframe.addEventListener("pointerdown", () => {
+        activeFrame = iframe;
+        cards.forEach(c => c.querySelector("[data-badge]").classList.remove("on"));
+        card.querySelector("[data-badge]").classList.add("on");
       });
+    });
 
-      // Botão "Forçar modo Drive"
-      card.querySelector("[data-force-drive]").addEventListener("click", () => toDriveMode(key, "Forçado pelo usuário."));
-    }
-
-    async function loadPDF(key){
-      const s = state[key];
-      const { card, container, pdfViewer, linkService } = s;
-
-      // links "Abrir" e "Baixar"
-      card.querySelector("[data-open]").href = urls[key].view;
-      const down = card.querySelector("[data-download]");
-      down.href = urls[key].direct; down.setAttribute("download", `${key}.pdf`);
-
-      // se estiver abrindo o HTML local (file://), já usa preview do Drive
-      if (isFileProtocol){
-        toDriveMode(key, "Arquivo aberto localmente (file://).");
+    // Botão de busca
+    document.getElementById("btnSearch").addEventListener("click", () => {
+      if (!activeFrame) {
+        alert("Toque em um dos PDFs para ativá-lo.");
         return;
       }
-
-      // tenta PDF.js
-      setStatus(card, "Carregando…");
-      try{
-        if (s.loadingTask){ try{ await s.loadingTask.destroy(); }catch{} }
-        s.loadingTask = pdfjsLib.getDocument({ url: urls[key].direct, withCredentials:false });
-        const pdfDoc = await s.loadingTask.promise;
-        s.pdfDoc = pdfDoc;
-        pdfViewer.setDocument(pdfDoc);
-        linkService.setDocument(pdfDoc, null);
-        s.eventBus.on("pagesinit", () => { pdfViewer.currentScaleValue = "page-width"; }, { once:true });
-        setStatus(card, `Carregado: ${pdfDoc.numPages} página(s). Toque no PDF para deixá-lo ativo e usar o botão de busca.`);
-      }catch(err){
-        console.warn(`Falha PDF.js (${key}). Indo para preview do Drive.`, err);
-        toDriveMode(key, "O Drive bloqueou o carregamento direto (CORS/permissão).");
-      }
-    }
-
-    async function doSearchOneButton(){
-      const s = state[activeKey];
-      if (!s){ return; }
-
-      if (!s.pdfDoc){
-        // Está em modo Drive: abre o arquivo no Drive para usar a busca nativa
-        window.open(urls[activeKey].view, "_blank", "noopener");
-        return;
-      }
-      let q = prompt("Digite a palavra/frase para buscar no PDF ativo:");
-      if (q && q.trim()){
-        s.lastQuery = q.trim();
-        s.findController.executeCommand("find", {
-          query: s.lastQuery, phraseSearch: true,
-          caseSensitive: false, entireWord: false,
-          highlightAll: true, findPrevious: false
-        });
-      }else if (s.lastQuery){
-        s.findController.executeCommand("findagain", { query: s.lastQuery, findPrevious:false });
-      }
-    }
-
-    // init
-    for (const card of cards){
-      const key = card.getAttribute("data-key");
-      mountViewer(key, card);
-      setBadge(card, key === activeKey);
-    }
-    loadPDF("aula"); loadPDF("esmalte"); loadPDF("torno");
-    document.getElementById("btnSearch").addEventListener("click", doSearchOneButton);
+      const term = prompt("Digite a palavra/frase para buscar:");
+      if (!term) return;
+      const url = new URL(activeFrame.src);
+      url.hash = "search=" + encodeURIComponent(term);
+      activeFrame.src = url.toString();
+    });
   </script>
 </body>
 </html>
