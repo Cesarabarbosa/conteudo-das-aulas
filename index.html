@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de Fornecedores de Materiais Cerâmicos</title>
+<style>
+  :root{ --bg:#f7f9fc; --card:#ffffff; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --accent:#2563eb; --chip:#eef2ff; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);z-index:10}
+  .wrap{max-width:1100px;margin:0 auto;padding:16px}
+  h1{margin:6px 0 8px 0;font-size: clamp(20px, 3vw, 28px)}
+  .sub{color:var(--muted);margin:0 0 12px}
+  .filters{display:grid;gap:12px;grid-template-columns: 1fr}
+  @media(min-width:900px){ .filters{grid-template-columns: 1.2fr 1fr 1fr 1fr} }
+  .fbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .fbox label{display:block;font-weight:600;margin-bottom:6px}
+  input[type="text"], select{ width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:white }
+  .tags{display:flex;flex-wrap:wrap;gap:8px;max-height:120px;overflow:auto;border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+  .tag{font-size:12px;background:var(--chip);border:1px solid #dbeafe;border-radius:999px;padding:6px 10px;cursor:pointer;white-space:nowrap}
+  .results{margin:16px 0;display:grid;gap:12px}
+  @media(min-width:800px){ .results{grid-template-columns:1fr 1fr} }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .name{font-weight:700;font-size:18px}
+  .meta{color:var(--muted);font-size:13px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:#f3f4f6;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;font-size:12px}
+  .links a{display:inline-block;margin-right:10px;font-size:13px;text-decoration:none;color:var(--accent)}
+  .count{color:var(--muted);font-size:13px}
+  footer{padding:24px 0;color:var(--muted)}
+  .small{font-size:12px}
+  .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+  button{ padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer }
+  button:hover{background:#f9fafb}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Guia de Fornecedores de Materiais Cerâmicos</h1>
+    <p class="sub">Pesquise por nome, produto, cidade, estado, categoria ou palavras‑chave. Clique em tags para filtrar rapidamente.</p>
+    <div class="filters">
+      <div class="fbox">
+        <label for="q">Busca rápida</label>
+        <input id="q" type="text" placeholder="Ex.: esmaltes, argila, Cunha, 'Pascoal'…">
+        <div class="toolbar">
+          <button id="btn-clear">Limpar filtros</button>
+          <span class="count" id="count"></span>
+        </div>
+      </div>
+      <div class="fbox">
+        <label for="sel-categoria">Categoria</label>
+        <select id="sel-categoria"><option value="">Todas</option></select>
+      </div>
+      <div class="fbox">
+        <label for="sel-estado">Estado (UF)</label>
+        <select id="sel-estado"><option value="">Todos</option></select>
+      </div>
+      <div class="fbox">
+        <label for="sel-cidade">Cidade</label>
+        <select id="sel-cidade"><option value="">Todas</option></select>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="fbox">
+    <label>Tags populares</label>
+    <div class="tags" id="tags"></div>
+  </div>
+  <div class="results" id="results"></div>
+  <footer class="small">
+    <p><strong>Como atualizar:</strong> edite o arquivo <code>fornecedores.json</code> (gerado a partir do CSV) e mantenha as chaves: <code>nome, categoria, cidade, estado, produtos, whatsapp, site, instagram, email, observacoes, palavras_chave</code>. Você pode adicionar <code>tags</code> manualmente, se quiser.</p>
+    <p>Ambos os arquivos (<code>index.html</code> e <code>fornecedores.json</code>) devem ficar na mesma pasta da raiz do repositório.</p>
+  </footer>
+</main>
+
+<script>
+const DATA_URL = "fornecedores.json";
+let DB = []; let TAG_FREQ = {};
+
+function deriveTags(r){
+  const set = new Set(r.tags || []);
+  function addFrom(text){
+    if(!text) return;
+    let t = text.replace(/[;|#/\\]/g, ",").split(",").map(s=>s.trim()).filter(Boolean);
+    t.forEach(v => set.add(v));
+  }
+  addFrom(r.produtos); addFrom(r.palavras_chave); addFrom(r.observacoes);
+  return Array.from(set);
+}
+
+function buildOptions(id, values){
+  const sel = document.getElementById(id);
+  const baseLabel = (id==="sel-estado")? "Todos":"Todas";
+  const opts = ["", ...Array.from(new Set(values.filter(Boolean))).sort((a,b)=>a.localeCompare(b, 'pt-BR', {sensitivity:'base'}))];
+  sel.innerHTML = opts.map(v => `<option value="${v}">${v || baseLabel}</option>`).join("");
+}
+
+function renderTagsCloud(){
+  const el = document.getElementById("tags");
+  const entries = Object.entries(TAG_FREQ).sort((a,b)=>b[1]-a[1]).slice(0,120);
+  el.innerHTML = entries.map(([t,n])=>`<span class="tag" data-tag="${t}">${t}</span>`).join("");
+  el.querySelectorAll(".tag").forEach(tag=>{
+    tag.addEventListener("click", ()=>{
+      const q = document.getElementById("q");
+      const cur = q.value.trim();
+      q.value = cur ? (cur + " " + `"${tag.dataset.tag}"`) : `"${tag.dataset.tag}"`;
+      applyFilters(); q.focus();
+    });
+  });
+}
+
+function card(r){
+  const loc = [r.cidade, r.estado].filter(Boolean).join(" • ");
+  const links = [];
+  if(r.site){ links.push(`<a href="${r.site}" target="_blank" rel="noopener">Site</a>`); }
+  if(r.instagram){ let ig = r.instagram; if(!ig.startsWith("http")) ig = "https://instagram.com/" + ig.replace("@","").trim();
+    links.push(`<a href="${ig}" target="_blank" rel="noopener">Instagram</a>`); }
+  if(r.whatsapp){ let wa = (r.whatsapp||"").replace(/\D/g,""); if(wa.length>=10){ const url = `https://wa.me/${wa}`; links.push(`<a href="${url}" target="_blank" rel="noopener">WhatsApp</a>`); } }
+  if(r.email){ links.push(`<a href="mailto:${r.email}">Email</a>`); }
+  const chips = deriveTags(r).slice(0,10).map(t=>`<span class="chip">${t}</span>`).join("");
+  return `
+  <div class="card">
+    <div class="name">${r.nome || "(Sem nome)"}</div>
+    <div class="meta">${[r.categoria, loc].filter(Boolean).join(" • ")}</div>
+    ${r.produtos ? `<div>${r.produtos}</div>` : ""}
+    ${r.observacoes ? `<div class="small">${r.observacoes}</div>` : ""}
+    <div class="links">${links.join("")}</div>
+    <div class="chips">${chips}</div>
+  </div>`;
+}
+
+function matchQuery(r, q){
+  if(!q) return true;
+  const hay = [
+    r.nome, r.categoria, r.cidade, r.estado, r.produtos, r.observacoes,
+    r.palavras_chave, (deriveTags(r)||[]).join(" ")
+  ].join(" ").toLowerCase();
+
+  const tokens = q.match(/"[^"]+"|\S+/g) || [];
+  return tokens.every(tok=>{
+    tok = tok.toLowerCase();
+    if(tok.startsWith('"') && tok.endsWith('"')){ const exact = tok.slice(1,-1); return hay.includes(exact); }
+    return hay.includes(tok);
+  });
+}
+
+function applyFilters(){
+  const q = document.getElementById("q").value.trim();
+  const cat = document.getElementById("sel-categoria").value;
+  const uf = document.getElementById("sel-estado").value;
+  const cid = document.getElementById("sel-cidade").value;
+
+  const filtered = DB.filter(r=>{
+    if(cat && r.categoria !== cat) return false;
+    if(uf && r.estado !== uf) return false;
+    if(cid && r.cidade !== cid) return false;
+    if(!matchQuery(r, q)) return false;
+    return true;
+  });
+
+  document.getElementById("results").innerHTML = filtered.map(card).join("");
+  document.getElementById("count").textContent = filtered.length + " fornecedor(es) encontrado(s).";
+}
+
+function computeTagFreq(){
+  TAG_FREQ = {};
+  DB.forEach(r=>{ deriveTags(r).forEach(t=>{ const k = t.trim(); if(!k) return; TAG_FREQ[k] = (TAG_FREQ[k]||0)+1; }); });
+}
+
+function initOptions(){
+  buildOptions("sel-categoria", DB.map(r=>r.categoria));
+  buildOptions("sel-estado", DB.map(r=>r.estado));
+  buildOptions("sel-cidade", DB.map(r=>r.cidade));
+}
+
+function wire(){
+  ["q","sel-categoria","sel-estado","sel-cidade"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", applyFilters);
+    document.getElementById(id).addEventListener("change", applyFilters);
+  });
+  document.getElementById("btn-clear").addEventListener("click", ()=>{
+    document.getElementById("q").value="";
+    document.getElementById("sel-categoria").value="";
+    document.getElementById("sel-estado").value="";
+    document.getElementById("sel-cidade").value="";
+    applyFilters();
+  });
+}
+
+fetch(DATA_URL).then(r=>r.json()).then(data=>{
+  DB = data.map(r=>({
+    nome: r.nome || "", categoria: r.categoria || "", cidade: r.cidade || "", estado: r.estado || "",
+    produtos: r.produtos || "", whatsapp: r.whatsapp || "", site: r.site || "", instagram: r.instagram || "",
+    email: r.email || "", observacoes: r.observacoes || "", palavras_chave: r.palavras_chave || "", tags: r.tags || []
+  }));
+  computeTagFreq(); initOptions(); renderTagsCloud(); wire(); applyFilters();
+}).catch(err=>{
+  document.getElementById("results").innerHTML = "<p>Não foi possível carregar o arquivo fornecedores.json. Coloque o JSON na mesma pasta do index.html.</p>";
+  console.error(err);
+});
+</script>
+</body>
+</html>
